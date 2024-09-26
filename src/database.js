@@ -18,7 +18,7 @@ db.on("ready", (db) => {
       console.log("Already populated");
     } else {
       console.log("Database is empty. Fetching JSON to populate DB.");
-      const itemsPromise = fetch("/minecraft-item-browser/js/items.json").then(
+      const itemsPromise = fetch("/js/items.json").then(
         (response) => response.json(),
       );
       const recipesPromise = fetch(
