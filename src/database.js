@@ -22,7 +22,7 @@ db.on("ready", (db) => {
         (response) => response.json(),
       );
       const recipesPromise = fetch(
-        "/minecraft-item-browser/js/recipes.json",
+        "/js/recipes.json",
       ).then((response) => response.json());
       const routeValue = router.currentRoute.value;
       new Promise.all([itemsPromise, recipesPromise])
