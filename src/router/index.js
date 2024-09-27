@@ -6,17 +6,14 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      redirect: { name: 'Home' }
+    },
+    {
+      path: "/:item_name?",
+      name: "Home",
       component: McHome,
       props: true,
     },
-    // Remove or modify the old path if it's no longer needed
-    // {
-    //   path: '/minecraft-item-browser/:item_name?',
-    //   name: 'OldPath',
-    //   component: McHome,
-    //   props: true,
-    // },
   ],
 });
 
