@@ -1,24 +1,26 @@
+// scripts/sitemap.mjs
 import { SitemapStream } from "sitemap";
 import { readFileSync, createWriteStream } from "fs";
+import path from "path";
 
-// Set BASE_URL to your production domain and fallback to localhost for development
+// Determine base URL for production or local development
 const BASE_URL = process.env.NODE_ENV === "production"
-  ? "https://minecraft-item.weplayold.com"  // Your live domain on Vercel
-  : "http://localhost:8080";  // Local development URL
+  ? "https://minecraft-item.weplayold.com"
+  : "http://localhost:8080";
 
-// Output the sitemap in the public directory (works for both development and Vercel)
-const OUTPUT_PATH = "./public/sitemap.xml";
+// Define output path for sitemap.xml
+const OUTPUT_PATH = path.resolve(process.cwd(), "public/sitemap.xml");
 
 // Read items from the JSON file
-const items = JSON.parse(readFileSync("./public/js/items.json"));
+const items = JSON.parse(readFileSync(path.resolve(process.cwd(), "public/js/items.json"), "utf-8"));
 console.log(`Number of items: ${items.length}`);
 
-// Create the sitemap stream
+// Create and write sitemap
 const sitemap = new SitemapStream();
 const writeStream = createWriteStream(OUTPUT_PATH);
 sitemap.pipe(writeStream);
 
-// Add each item to the sitemap
+// Add items to sitemap
 items.forEach(item => {
   sitemap.write({
     url: `${BASE_URL}/${item.name}`,
@@ -27,5 +29,5 @@ items.forEach(item => {
   });
 });
 
-// End the sitemap stream
+// End sitemap stream
 sitemap.end();
