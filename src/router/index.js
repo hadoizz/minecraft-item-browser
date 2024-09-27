@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import McHome from "@/views/McHome.vue";
+import NotFound from "@/views/NotFound.vue";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(),  // No base path, uses the root
   routes: [
     {
       path: '/',
@@ -13,6 +14,12 @@ const router = createRouter({
       name: "Home",
       component: McHome,
       props: true,
+    },
+    // Catch-all route for 404
+    {
+      path: '/:catchAll(.*)',
+      name: 'NotFound',
+      component: NotFound,
     },
   ],
 });
