@@ -2,8 +2,8 @@ import { SitemapStream } from "sitemap";
 import { readFileSync, createWriteStream } from "fs";
 
 const BASE_URL = process.env.GITHUB_ACTIONS
-  ? "https://njt1982.github.io/minecraft-item-browser"
-  : "http://localhost:8080/minecraft-item-browser";
+  ? "https://minecraft-item.weplayold.com/"
+  : "http://localhost:8080/";
 
 const OUTPUT_PATH = process.env.GITHUB_ACTIONS
   ? "./dist/sitemap.xml"
