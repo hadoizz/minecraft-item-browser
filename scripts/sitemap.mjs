@@ -1,4 +1,3 @@
-// scripts/sitemap.mjs
 import { SitemapStream } from "sitemap";
 import { readFileSync, createWriteStream } from "fs";
 import path from "path";
