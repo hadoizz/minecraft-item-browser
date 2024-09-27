@@ -1,27 +1,41 @@
 import { SitemapStream } from "sitemap";
 import { readFileSync, createWriteStream } from "fs";
+import path from "path";
 
-const BASE_URL = process.env.GITHUB_ACTIONS
-  ? "https://minecraft-item.weplayold.com/"
-  : "http://localhost:8080/";
+const BASE_URL = "https://minecraft-item.weplayold.com/";
 
-const OUTPUT_PATH = process.env.GITHUB_ACTIONS
-  ? "./dist/sitemap.xml"
-  : "./public/sitemap.xml";
+const OUTPUT_PATH = path.join(process.cwd(), "public", "sitemap.xml");
 
-const items = JSON.parse(readFileSync("./public/js/items.json"));
-console.log(items.length);
+async function generateSitemap() {
+  try {
+    // Read items.json
+    const items = JSON.parse(readFileSync(path.join(process.cwd(), "public", "js", "items.json"), "utf8"));
+    console.log(items.length);
 
-const sitemap = new SitemapStream();
-const writeStream = createWriteStream(OUTPUT_PATH);
-sitemap.pipe(writeStream);
+    // Create sitemap
+    const sitemapStream = new SitemapStream({ hostname: BASE_URL });
+    const writeStream = createWriteStream(OUTPUT_PATH);
 
-items.map(item =>
-  sitemap.write({
-    url: `${BASE_URL}/${item.name}`,
-    changefreq: "weekly",
-    priority: 0.5
-  })
-);
+    sitemapStream.pipe(writeStream);
 
-sitemap.end();
+    items.forEach(item => 
+      sitemapStream.write({
+        url: `${BASE_URL}/${item.name}`,
+        changefreq: "weekly",
+        priority: 0.5
+      })
+    );
+
+    sitemapStream.end();
+
+    // Ensure write stream is properly closed
+    writeStream.on('finish', () => {
+      console.log('Sitemap created successfully at', OUTPUT_PATH);
+    });
+    
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+  }
+}
+
+generateSitemap();
