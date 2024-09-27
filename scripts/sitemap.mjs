@@ -2,40 +2,32 @@ import { SitemapStream } from "sitemap";
 import { readFileSync, createWriteStream } from "fs";
 import path from "path";
 
-const BASE_URL = "https://minecraft-item.weplayold.com/";
+// Use the URL of your deployed site
+const BASE_URL = "https://minecraft-item.weplayold.com";
 
+// Adjust the OUTPUT_PATH based on the deployment environment
 const OUTPUT_PATH = path.join(process.cwd(), "public", "sitemap.xml");
 
-async function generateSitemap() {
-  try {
-    // Read items.json
-    const items = JSON.parse(readFileSync(path.join(process.cwd(), "public", "js", "items.json"), "utf8"));
-    console.log(items.length);
+// Read items.json from the public directory
+const items = JSON.parse(readFileSync(path.join(process.cwd(), "public", "js", "items.json"), "utf8"));
+console.log(items.length);
 
-    // Create sitemap
-    const sitemapStream = new SitemapStream({ hostname: BASE_URL });
-    const writeStream = createWriteStream(OUTPUT_PATH);
+// Create sitemap and write it to the specified output path
+const sitemap = new SitemapStream({ hostname: BASE_URL });
+const writeStream = createWriteStream(OUTPUT_PATH);
 
-    sitemapStream.pipe(writeStream);
+sitemap.pipe(writeStream);
 
-    items.forEach(item => 
-      sitemapStream.write({
-        url: `${BASE_URL}/${item.name}`,
-        changefreq: "weekly",
-        priority: 0.5
-      })
-    );
+items.forEach(item =>
+  sitemap.write({
+    url: `${BASE_URL}/${item.name}`,
+    changefreq: "weekly",
+    priority: 0.5
+  })
+);
 
-    sitemapStream.end();
+sitemap.end();
 
-    // Ensure write stream is properly closed
-    writeStream.on('finish', () => {
-      console.log('Sitemap created successfully at', OUTPUT_PATH);
-    });
-    
-  } catch (error) {
-    console.error('Error generating sitemap:', error);
-  }
-}
-
-generateSitemap();
+writeStream.on('finish', () => {
+  console.log('Sitemap created successfully at', OUTPUT_PATH);
+});
