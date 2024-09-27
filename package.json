@@ -5,15 +5,16 @@
   "type": "module",
   "description": "Minecraft Item Search",
   "author": "Nicholas Thompson <njt1982@gmail.com>",
-  "scripts": {
-    "serve": "vite serve",
-    "build": "vite build",
-    "dev": "vite",
-    "lint": "eslint src",
-    "sitemap": "node scripts/sitemap.mjs",
-    "download_client_data": "node scripts/download_client_data.mjs",
-    "parse_jar": "node scripts/parse_jar.mjs"
-  },
+"scripts": {
+  "serve": "vite serve",
+  "build": "npm run sitemap && vite build",
+  "dev": "vite",
+  "lint": "eslint src",
+  "sitemap": "node scripts/sitemap.mjs",
+  "download_client_data": "node scripts/download_client_data.mjs",
+  "parse_jar": "node scripts/parse_jar.mjs"
+}
+
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "@vue/compat": "^3.2",
